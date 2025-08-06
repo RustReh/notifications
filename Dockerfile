@@ -1,14 +1,17 @@
 FROM python:3.12-slim
 
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
-RUN pip install poetry
+ENV POETRY_VERSION=1.8.2
+RUN pip install "poetry==$POETRY_VERSION"
 
-COPY pyproject.toml poetry.lock* ./
+COPY pyproject.toml .
+
+RUN poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi --no-root
 
 COPY . .
 
-RUN poetry config virtualenvs.create false \
-    && poetry install --no-dev --no-interaction --no-ansi
-
-CMD ["python", "-m", "src/main.py"]
+CMD ["python", "-m", "src.main"]

@@ -1,8 +1,9 @@
 import logging
 import aio_pika
 from pydantic import ValidationError
-from src.settings import settings
-from src.gateway.gateway import NotificationGateway
+from .settings import settings
+from .gateway import NotificationGateway
+
 from src.schemas.request_schema import NotificationRequest
 from src.utils.exceptions import NotificationError
 
