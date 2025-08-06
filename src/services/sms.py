@@ -1,13 +1,14 @@
 import httpx
-from ..gateway.interfaces import NotificationService
+
 from ..schemas.request_schema import NotificationRequest
 from ..utils.exceptions import NotificationError
+from src.settings import settings
 
 
 class SMSService:
-    def __init__(self, api_url: str, api_key: str):
-        self.api_url = api_url
-        self.api_key = api_key
+    def __init__(self):
+        self.api_url = settings.SMS_API_URL
+        self.api_key = settings.SMS_API_KEY
 
     async def send_message(self, phone: str, request: NotificationRequest) -> bool:
         try:

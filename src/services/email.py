@@ -2,13 +2,14 @@ import aiosmtplib
 from email.mime.text import MIMEText
 from ..schemas.request_schema import NotificationRequest
 from ..utils.exceptions import NotificationError
+from src.settings import settings
 
 class EmailService:
-    def __init__(self, smtp_server: str, smtp_port: int, username: str, password: str):
-        self.smtp_server = smtp_server
-        self.smtp_port = smtp_port
-        self.username = username
-        self.password = password
+    def __init__(self):
+        self.smtp_server = settings.SMTP_SERVER
+        self.smtp_port = settings.SMTP_PORT
+        self.username = settings.SMTP_USERNAME
+        self.password = settings.SMTP_PASSWORD
 
     async def send_message(self, recipient: str, request: NotificationRequest) -> bool:
         try:

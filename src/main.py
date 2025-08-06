@@ -1,12 +1,11 @@
 import logging
 import aio_pika
 from pydantic import ValidationError
-from src.settings import Settings
+from src.settings import settings
 from src.gateway.gateway import NotificationGateway
 from src.schemas.request_schema import NotificationRequest
 from src.utils.exceptions import NotificationError
 
-settings = Settings()
 logger = logging.getLogger(__name__)
 
 async def process_message(message: aio_pika.IncomingMessage):

@@ -2,10 +2,11 @@ import httpx
 
 from ..schemas.request_schema import NotificationRequest
 from ..utils.exceptions import NotificationError
+from src.settings import settings
 
 class TelegramService:
-    def __init__(self, bot_token: str):
-        self.api_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
+    def __init__(self):
+        self.api_url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
 
     async def send_message(self, chat_id: str, request: NotificationRequest) -> bool:
         try:
