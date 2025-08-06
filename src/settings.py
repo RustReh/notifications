@@ -10,5 +10,5 @@ class Settings(BaseSettings):
     RABBIT_SERVER: str = os.getenv("RABBIT_SERVER", "localhost:5672")
 
     @property
-    def RABBITMQ_URL(self):
-        return (f"amqp://{self.RABBIT_USER}:{self.RABBIT_PASS}@{self.RABBIT_SERVER}/",)
+    def RABBITMQ_URL(self) -> str:
+        return f"amqp://{self.RABBIT_USER}:{self.RABBIT_PASS}@{self.RABBIT_SERVER}/"

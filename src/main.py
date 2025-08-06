@@ -4,26 +4,27 @@ from pydantic import ValidationError
 from src.settings import Settings
 from src.gateway.gateway import NotificationGateway
 from src.schemas.request_schema import NotificationRequest
+from src.utils.exceptions import NotificationError
 
 settings = Settings()
 logger = logging.getLogger(__name__)
 
 async def process_message(message: aio_pika.IncomingMessage):
-    """Обработчик сообщений из RabbitMQ"""
     async with message.process():
         try:
             request = NotificationRequest.model_validate_json(message.body)
+
             gateway = NotificationGateway()
 
-            if not await gateway.send_with_fallback(request):
-                logger.error(f"Notification failed after all retries: {request}")
-                await message.nack(requeue=False)
-            else:
-                await message.ack()
+            await gateway.send_with_fallback(request)
+            await message.ack()
 
         except ValidationError as e:
             logger.error(f"Invalid message format: {e.errors()}")
             await message.ack()
+        except NotificationError as e:
+            logger.error(f"Notification failed: {str(e)}")
+            await message.nack(requeue=False)
         except Exception as e:
             logger.critical(f"Unexpected error: {str(e)}", exc_info=True)
             await message.nack(requeue=True)

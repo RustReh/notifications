@@ -18,7 +18,6 @@ class NotificationRequest(BaseModel):
     contacts: ContactData
     priority_order: list[str] = ["telegram", "email", "sms"]
     subject: str | None = None
-    template_id: str| None = None
 
     @field_validator("priority_order")
     def validate_priority(cls, v):
